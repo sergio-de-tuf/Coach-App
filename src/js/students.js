@@ -1,3 +1,12 @@
+import { 
+    getStudents, 
+    searchStudents, 
+    addStudent, 
+    updateStudent, 
+    deleteStudent, 
+    getStudentById 
+} from './database.js';
+
 // ===== СОСТОЯНИЕ =====
 let allStudents = [];
 let filteredStudents = [];
@@ -121,7 +130,7 @@ function updateCount(count) {
 }
 
 function getWordForm(number, one, two, five) {
-    const n = Math.abs(number);
+    let n = Math.abs(number);
     n %= 100;
     if (n >= 5 && n <= 20) return five;
     n %= 10;

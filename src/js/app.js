@@ -4,8 +4,8 @@
 
 // Импорты (для модульной системы)
 // Если используете ES Modules, раскомментируйте:
-// import { initDatabase } from './database.js';
-// import { initStudents } from './students.js';
+ import { initDatabase } from './database.js';
+ import { initStudents } from './students.js';
 
 // Если используете обычные скрипты (без модулей), просто вызываем функции:
 

@@ -3,38 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="
+    default-src 'self';
+    script-src 'self' 'unsafe-inline' 'unsafe-eval';
+    style-src 'self' 'unsafe-inline';
+    connect-src 'self';
+    worker-src 'self' blob:;
+    child-src 'self' blob:;
+"
+    />
     <title>Coach-App</title>
 
     <!-- Сначала сброс стилей -->
     <link rel="stylesheet" href="css/reset.css" />
     <!-- Потом ваши стили -->
-    <link rel="stylesheet" href="css/students.css">
+    <link rel="stylesheet" href="css/students.css" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
     <!-- Шапка приложения -->
     <header class="app-header">
       <div class="header-container">
-
         <!-- Левая часть: логотип и название -->
         <div class="header-left">
           <div class="logo">
             <div class="logo-icon"></div>
-              <svg
-                version="1.0"
-                xmlns="http://www.w3.org/2000/svg"
-                width="25.000000pt"
-                height="35.000000pt"
-                viewBox="0 0 150.000000 248.000000"
-                preserveAspectRatio="xMidYMid meet"
+            <svg
+              version="1.0"
+              xmlns="http://www.w3.org/2000/svg"
+              width="25.000000pt"
+              height="35.000000pt"
+              viewBox="0 0 150.000000 248.000000"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              <g
+                transform="translate(0.000000,248.000000) scale(0.100000,-0.100000)"
+                fill="#aaffbb"
+                stroke="none"
               >
-                <g
-                  transform="translate(0.000000,248.000000) scale(0.100000,-0.100000)"
-                  fill="#aaffbb"
-                  stroke="none"
-                >
-                  <path
-                    d="M770 2453 c-97 -16 -129 -46 -131 -124 -1 -31 1 -61 5 -67 3 -6 2
+                <path
+                  d="M770 2453 c-97 -16 -129 -46 -131 -124 -1 -31 1 -61 5 -67 3 -6 2
 -22 -4 -36 -7 -19 -5 -34 8 -58 9 -18 20 -34 25 -36 4 -2 7 -10 7 -17 0 -18
 20 -23 52 -14 36 10 41 0 15 -32 -17 -20 -34 -28 -70 -32 -37 -4 -57 -12 -82
 -37 -39 -38 -58 -78 -53 -112 2 -15 -5 -30 -21 -42 -13 -11 -31 -37 -41 -59
@@ -69,14 +79,14 @@ m-60 -29 c7 -12 -31 -25 -45 -16 -5 3 -10 10 -10 16 0 12 47 12 55 0z m412
 -11 -29 -11 -13 0 -1 35 41 121 l46 94 15 -30 c9 -16 27 -44 40 -61z m-471 -1
 c-11 -11 -17 4 -9 23 7 18 8 18 11 1 2 -10 1 -21 -2 -24z m114 28 c0 -6 -4
 -13 -10 -16 -5 -3 -10 1 -10 9 0 9 5 16 10 16 6 0 10 -4 10 -9z"
-                  />
-                </g>
-              </svg>
-            </div>
-            <span class="logo-text">Журнал</span>
+                />
+              </g>
+            </svg>
           </div>
+          <span class="logo-text">Журнал</span>
+        </div>
 
-          <!-- Центральная часть: навигация -->
+        <!-- Центральная часть: навигация -->
         <nav class="header-nav">
           <ul class="nav-list">
             <li><a href="#dashboard" class="nav-link active">Главная</a></li>
@@ -103,104 +113,139 @@ c-11 -11 -17 4 -9 23 7 18 8 18 11 1 2 -10 1 -21 -2 -24z m114 28 c0 -6 -4
           </button>
         </div>
       </div>
+      <!-- Мобильное меню  -->
+      <div id="mobileMenu" class="mobile-menu">
+        <nav>
+          <ul class="mobile-nav-list">
+            <li>
+              <a href="#dashboard" class="mobile-nav-link active">Главная</a>
+            </li>
+            <li><a href="#students" class="mobile-nav-link">Ученики</a></li>
+            <li><a href="#schedule" class="mobile-nav-link">Расписание</a></li>
+          </ul>
+        </nav>
+      </div>
     </header>
-    <!-- Мобильное меню  -->
-    <div id="mobileMenu" class="mobile-menu">
-      <nav>
-        <ul class="mobile-nav-list">
-          <li>
-            <a href="#dashboard" class="mobile-nav-link active">Главная</a>
-          </li>
-          <li><a href="#students" class="mobile-nav-link">Ученики</a></li>
-          <li><a href="#schedule" class="mobile-nav-link">Расписание</a></li>
-        </ul>
-      </nav>
-    </div>
-
-</div>
-
-        
 
     <!-- Основной контент -->
-<main class="main-content">
-    <!-- Секция "Ученики" -->
-    <section id="studentsSection" class="section active">
+    <main class="main-content">
+      <!-- Секция "Ученики" -->
+      <section id="studentsSection" class="section active">
         <div class="section-header">
-            <h2 class="section-title">👥 Ученики</h2>
-            <button id="addStudentBtn" class="btn btn-primary">
-                <span class="btn-icon">➕</span>
-                Добавить ученика
-            </button>
+          <h2 class="section-title">👥 Ученики</h2>
+          <button id="addStudentBtn" class="btn btn-primary">
+            <span class="btn-icon">➕</span>
+            Добавить ученика
+          </button>
         </div>
 
         <!-- Поиск и фильтр -->
         <div class="search-bar">
-            <input type="text" id="searchInput" class="search-input" placeholder="🔍 Поиск по имени, фамилии или телефону...">
-            <span class="student-count" id="studentCount">0 учеников</span>
+          <input
+            type="text"
+            id="searchInput"
+            class="search-input"
+            placeholder="🔍 Поиск по имени, фамилии или телефону..."
+          />
+          <span class="student-count" id="studentCount">0 учеников</span>
         </div>
 
         <!-- Список учеников -->
         <div id="studentsList" class="students-list">
-            <!-- Карточки учеников будут генерироваться динамически -->
-            <div class="empty-state">
-                <span class="empty-icon">📋</span>
-                <p class="empty-text">Нет учеников</p>
-                <p class="empty-subtext">Нажмите "Добавить ученика", чтобы начать</p>
-            </div>
+          <!-- Карточки учеников будут генерироваться динамически -->
+          <div class="empty-state">
+            <span class="empty-icon">📋</span>
+            <p class="empty-text">Нет учеников</p>
+            <p class="empty-subtext">
+              Нажмите "Добавить ученика", чтобы начать
+            </p>
+          </div>
         </div>
-    </section>
-</main>
+      </section>
+    </main>
 
-<!-- Модальное окно для добавления/редактирования ученика -->
-<div id="studentModal" class="modal">
-    <div class="modal-content">
+    <!-- Модальное окно для добавления/редактирования ученика -->
+    <div id="studentModal" class="modal">
+      <div class="modal-content">
         <div class="modal-header">
-            <h3 id="modalTitle">Добавить ученика</h3>
-            <button class="modal-close" id="closeModal">&times;</button>
+          <h3 id="modalTitle">Добавить ученика</h3>
+          <button class="modal-close" id="closeModal">&times;</button>
         </div>
-        
+
         <form id="studentForm" class="student-form">
-            <input type="hidden" id="studentId" value="">
-            
-            <div class="form-group">
-                <label for="firstName">Имя <span class="required">*</span></label>
-                <input type="text" id="firstName" class="form-input" placeholder="Введите имя" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="lastName">Фамилия <span class="required">*</span></label>
-                <input type="text" id="lastName" class="form-input" placeholder="Введите фамилию" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="phone">Телефон <span class="required">*</span></label>
-                <input type="tel" id="phone" class="form-input" placeholder="+7 (999) 123-45-67" required>
-            </div>
-            
-            <div class="form-group">
-                <label for="email">Электронная почта</label>
-                <input type="email" id="email" class="form-input" placeholder="example@mail.ru">
-            </div>
-            
-            <div class="form-group">
-                <label for="note">Заметка</label>
-                <textarea id="note" class="form-textarea" rows="3" placeholder="Дополнительная информация об ученике..."></textarea>
-            </div>
-            
-            <div class="form-actions">
-                <button type="button" class="btn btn-secondary" id="cancelBtn">Отмена</button>
-                <button type="submit" class="btn btn-primary" id="saveBtn">
-                    <span id="saveBtnText">Сохранить</span>
-                </button>
-            </div>
+          <input type="hidden" id="studentId" value="" />
+
+          <div class="form-group">
+            <label for="firstName">Имя <span class="required">*</span></label>
+            <input
+              type="text"
+              id="firstName"
+              class="form-input"
+              placeholder="Введите имя"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="lastName"
+              >Фамилия <span class="required">*</span></label
+            >
+            <input
+              type="text"
+              id="lastName"
+              class="form-input"
+              placeholder="Введите фамилию"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Телефон <span class="required">*</span></label>
+            <input
+              type="tel"
+              id="phone"
+              class="form-input"
+              placeholder="+7 (999) 123-45-67"
+              required
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="email">Электронная почта</label>
+            <input
+              type="email"
+              id="email"
+              class="form-input"
+              placeholder="example@mail.ru"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="note">Заметка</label>
+            <textarea
+              id="note"
+              class="form-textarea"
+              rows="3"
+              placeholder="Дополнительная информация об ученике..."
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="cancelBtn">
+              Отмена
+            </button>
+            <button type="submit" class="btn btn-primary" id="saveBtn">
+              <span id="saveBtnText">Сохранить</span>
+            </button>
+          </div>
         </form>
+      </div>
     </div>
-</div>
-
-
-    <!-- <script src="js/database.js"></script> -->
-    <!-- <script src="js/students.js"></script> -->
-    <script src="js/theme.js"></script>
-    <script src="js/app.js"></script>
+    <!-- Подключение sql.js как глобального скрипта -->
+    <script src="assets/sql-wasm.js"></script>
+    <script type="module" src="js/database.js"></script>
+    <script type="module" src="js/students.js"></script>
+    <script type="module" src="js/theme.js"></script>
+    <script type="module" src="js/app.js"></script>
   </body>
 </html>
