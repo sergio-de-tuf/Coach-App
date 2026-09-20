@@ -99,6 +99,50 @@
     border-radius: 8px;
 }
 
+/* ===== ГЛАВНАЯ ===== */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+}
+
+.dashboard-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 14px;
+    padding: 24px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: all var(--transition-speed) ease;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px var(--shadow-color);
+    border-color: var(--accent-color);
+}
+
+.dashboard-icon {
+    font-size: 32px;
+    line-height: 1;
+}
+
+.dashboard-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent-color);
+    line-height: 1;
+}
+
+.dashboard-label {
+    font-size: 13px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
 /* ===== ПОИСК ===== */
 .search-bar {
     display: flex;
@@ -497,4 +541,207 @@
 
 .modal-content::-webkit-scrollbar-thumb:hover {
     background: var(--text-muted);
+}
+
+/* ===== ФИЛЬТРЫ ===== */
+.filter-buttons {
+    display: flex;
+    gap: 6px;
+    background: var(--bg-primary);
+    padding: 4px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.filter-btn {
+    padding: 6px 14px;
+    border: none;
+    background: transparent;
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 500;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+}
+
+.filter-btn:hover {
+    color: var(--text-primary);
+}
+
+.filter-btn.active {
+    background: var(--accent-color);
+    color: white;
+}
+
+/* ===== КАРТОЧКА ТРЕНИРОВКИ ===== */
+.training-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 16px;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    display: flex;
+    gap: 14px;
+}
+
+.training-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px var(--shadow-color);
+    border-color: var(--accent-color);
+}
+
+.training-card.past {
+    opacity: 0.65;
+}
+
+/* Дата слева */
+.training-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-primary);
+    border-radius: 10px;
+    padding: 10px;
+    min-width: 70px;
+    height: fit-content;
+    border: 1px solid var(--border-color);
+}
+
+.training-day {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--accent-color);
+    line-height: 1;
+}
+
+.training-month {
+    font-size: 12px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+/* Правая часть */
+.training-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.training-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.training-student {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.training-time {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.training-place {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.training-duration {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    background: var(--bg-primary);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    width: fit-content;
+}
+
+.training-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.training-actions .btn {
+    padding: 6px 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+}
+
+.training-actions .btn:hover {
+    background: var(--bg-primary);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.training-actions .btn-danger:hover {
+    border-color: #ef4444;
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.08);
+}
+
+/* Бейдж "Сегодня" */
+.training-today {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--accent-color);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 6px;
+    margin-left: 8px;
+    text-transform: uppercase;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .training-card {
+        flex-direction: column;
+    }
+
+    .training-date {
+        flex-direction: row;
+        justify-content: flex-start;
+        gap: 8px;
+        width: fit-content;
+        padding: 6px 12px;
+    }
+
+    .training-day {
+        font-size: 18px;
+    }
+
+    .training-month {
+        margin-top: 0;
+    }
+
+    .filter-buttons {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .filter-btn {
+        flex: 1;
+    }
 }

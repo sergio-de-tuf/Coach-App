@@ -83,15 +83,36 @@ c-11 -11 -17 4 -9 23 7 18 8 18 11 1 2 -10 1 -21 -2 -24z m114 28 c0 -6 -4
               </g>
             </svg>
           </div>
-          <span class="logo-text">Журнал</span>
+          <span class="logo-text">Coach</span>
         </div>
 
         <!-- Центральная часть: навигация -->
         <nav class="header-nav">
           <ul class="nav-list">
-            <li><a href="#dashboard" class="nav-link active">Главная</a></li>
-            <li><a href="#students" class="nav-link">Ученики</a></li>
-            <li><a href="#schedule" class="nav-link">Расписание</a></li>
+            <li>
+              <a
+                href="#dashboard"
+                class="nav-link"
+                data-section="dashboardSection"
+                >Главная</a
+              >
+            </li>
+            <li>
+              <a
+                href="#students"
+                class="nav-link"
+                data-section="studentsSection"
+                >Ученики</a
+              >
+            </li>
+            <li>
+              <a
+                href="#schedule"
+                class="nav-link"
+                data-section="scheduleSection"
+                >Расписание</a
+              >
+            </li>
           </ul>
         </nav>
 
@@ -118,10 +139,29 @@ c-11 -11 -17 4 -9 23 7 18 8 18 11 1 2 -10 1 -21 -2 -24z m114 28 c0 -6 -4
         <nav>
           <ul class="mobile-nav-list">
             <li>
-              <a href="#dashboard" class="mobile-nav-link active">Главная</a>
+              <a
+                href="#dashboard"
+                class="nav-link"
+                data-section="dashboardSection"
+                >Главная</a
+              >
             </li>
-            <li><a href="#students" class="mobile-nav-link">Ученики</a></li>
-            <li><a href="#schedule" class="mobile-nav-link">Расписание</a></li>
+            <li>
+              <a
+                href="#students"
+                class="mobile-nav-link"
+                data-section="studentsSection"
+                >Ученики</a
+              >
+            </li>
+            <li>
+              <a
+                href="#schedule"
+                class="mobile-nav-link"
+                data-section="scheduleSection"
+                >Расписание</a
+              >
+            </li>
           </ul>
         </nav>
       </div>
@@ -129,6 +169,30 @@ c-11 -11 -17 4 -9 23 7 18 8 18 11 1 2 -10 1 -21 -2 -24z m114 28 c0 -6 -4
 
     <!-- Основной контент -->
     <main class="main-content">
+      <!-- Секция "Главная" -->
+    <section id="dashboardSection" class="section active">
+        <div class="section-header">
+            <h2 class="section-title">🏠 Главная</h2>
+        </div>
+        
+        <div class="dashboard-grid">
+            <div class="dashboard-card">
+                <span class="dashboard-icon">👥</span>
+                <span class="dashboard-value" id="dashboardStudentsCount">0</span>
+                <span class="dashboard-label">Учеников</span>
+            </div>
+            <div class="dashboard-card">
+                <span class="dashboard-icon">📅</span>
+                <span class="dashboard-value" id="dashboardTrainingsCount">0</span>
+                <span class="dashboard-label">Тренировок</span>
+            </div>
+            <div class="dashboard-card">
+                <span class="dashboard-icon">🕐</span>
+                <span class="dashboard-value" id="dashboardUpcomingCount">0</span>
+                <span class="dashboard-label">Предстоящих</span>
+            </div>
+        </div>
+    </section>
       <!-- Секция "Ученики" -->
       <section id="studentsSection" class="section active">
         <div class="section-header">
@@ -162,89 +226,229 @@ c-11 -11 -17 4 -9 23 7 18 8 18 11 1 2 -10 1 -21 -2 -24z m114 28 c0 -6 -4
           </div>
         </div>
       </section>
-    </main>
-
-    <!-- Модальное окно для добавления/редактирования ученика -->
-    <div id="studentModal" class="modal">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h3 id="modalTitle">Добавить ученика</h3>
-          <button class="modal-close" id="closeModal">&times;</button>
+      <!-- Секция "Расписание" -->
+      <section id="scheduleSection" class="section">
+        <div class="section-header">
+          <h2 class="section-title">📅 Расписание тренировок</h2>
+          <button id="addTrainingBtn" class="btn btn-primary">
+            <span class="btn-icon">➕</span>
+            Добавить тренировку
+          </button>
         </div>
 
-        <form id="studentForm" class="student-form">
-          <input type="hidden" id="studentId" value="" />
-
-          <div class="form-group">
-            <label for="firstName">Имя <span class="required">*</span></label>
-            <input
-              type="text"
-              id="firstName"
-              class="form-input"
-              placeholder="Введите имя"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="lastName"
-              >Фамилия <span class="required">*</span></label
-            >
-            <input
-              type="text"
-              id="lastName"
-              class="form-input"
-              placeholder="Введите фамилию"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="phone">Телефон <span class="required">*</span></label>
-            <input
-              type="tel"
-              id="phone"
-              class="form-input"
-              placeholder="+7 (999) 123-45-67"
-              required
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="email">Электронная почта</label>
-            <input
-              type="email"
-              id="email"
-              class="form-input"
-              placeholder="example@mail.ru"
-            />
-          </div>
-
-          <div class="form-group">
-            <label for="note">Заметка</label>
-            <textarea
-              id="note"
-              class="form-textarea"
-              rows="3"
-              placeholder="Дополнительная информация об ученике..."
-            ></textarea>
-          </div>
-
-          <div class="form-actions">
-            <button type="button" class="btn btn-secondary" id="cancelBtn">
-              Отмена
+        <!-- Фильтры -->
+        <div class="search-bar">
+          <input
+            type="text"
+            id="searchTrainingInput"
+            class="search-input"
+            placeholder="🔍 Поиск по месту или ученику..."
+          />
+          <div class="filter-buttons">
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="upcoming">
+              Предстоящие
             </button>
-            <button type="submit" class="btn btn-primary" id="saveBtn">
-              <span id="saveBtnText">Сохранить</span>
-            </button>
+            <button class="filter-btn" data-filter="past">Прошедшие</button>
           </div>
-        </form>
+          <span class="student-count" id="trainingCount">0 тренировок</span>
+        </div>
+
+        <!-- Список тренировок -->
+        <div id="trainingsList" class="students-list">
+          <div class="empty-state">
+            <span class="empty-icon">📅</span>
+            <p class="empty-text">Нет тренировок</p>
+            <p class="empty-subtext">
+              Нажмите "Добавить тренировку", чтобы начать
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Модальное окно для добавления/редактирования ученика -->
+      <div id="studentModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="modalTitle">Добавить ученика</h3>
+            <button class="modal-close" id="closeModal">&times;</button>
+          </div>
+
+          <form id="studentForm" class="student-form">
+            <input type="hidden" id="studentId" value="" />
+
+            <div class="form-group">
+              <label for="firstName">Имя <span class="required">*</span></label>
+              <input
+                type="text"
+                id="firstName"
+                class="form-input"
+                placeholder="Введите имя"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="lastName"
+                >Фамилия <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                id="lastName"
+                class="form-input"
+                placeholder="Введите фамилию"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="phone">Телефон <span class="required">*</span></label>
+              <input
+                type="tel"
+                id="phone"
+                class="form-input"
+                placeholder="+7 (999) 123-45-67"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Электронная почта</label>
+              <input
+                type="email"
+                id="email"
+                class="form-input"
+                placeholder="example@mail.ru"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="note">Заметка</label>
+              <textarea
+                id="note"
+                class="form-textarea"
+                rows="3"
+                placeholder="Дополнительная информация об ученике..."
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="cancelBtn">
+                Отмена
+              </button>
+              <button type="submit" class="btn btn-primary" id="saveBtn">
+                <span id="saveBtnText">Сохранить</span>
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+
+      <!-- Модальное окно для тренировки -->
+      <div id="trainingModal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 id="trainingModalTitle">Добавить тренировку</h3>
+            <button class="modal-close" id="closeTrainingModal">&times;</button>
+          </div>
+
+          <form id="trainingForm" class="student-form">
+            <input type="hidden" id="trainingId" value="" />
+
+            <div class="form-group">
+              <label for="trainingStudent"
+                >Ученик <span class="required">*</span></label
+              >
+              <select id="trainingStudent" class="form-input" required>
+                <option value="">Выберите ученика</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="trainingDate"
+                >Дата <span class="required">*</span></label
+              >
+              <input
+                type="date"
+                id="trainingDate"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="trainingTime"
+                >Время <span class="required">*</span></label
+              >
+              <input
+                type="time"
+                id="trainingTime"
+                class="form-input"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="trainingPlace"
+                >Место <span class="required">*</span></label
+              >
+              <input
+                type="text"
+                id="trainingPlace"
+                class="form-input"
+                placeholder="Например: Зал на Ленина, 15"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="trainingDuration">Длительность (мин)</label>
+              <input
+                type="number"
+                id="trainingDuration"
+                class="form-input"
+                placeholder="60"
+                min="15"
+                step="15"
+              />
+            </div>
+
+            <div class="form-group">
+              <label for="trainingNote">Заметка</label>
+              <textarea
+                id="trainingNote"
+                class="form-textarea"
+                rows="3"
+                placeholder="Дополнительная информация..."
+              ></textarea>
+            </div>
+
+            <div class="form-actions">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                id="cancelTrainingBtn"
+              >
+                Отмена
+              </button>
+              <button
+                type="submit"
+                class="btn btn-primary"
+                id="saveTrainingBtn"
+              >
+                <span id="saveTrainingBtnText">Сохранить</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </main>
+
     <!-- Подключение sql.js как глобального скрипта -->
     <script src="assets/sql-wasm.js"></script>
     <script type="module" src="js/database.js"></script>
     <script type="module" src="js/students.js"></script>
+    <script type="module" src="js/schedule.js"></script>
     <script type="module" src="js/theme.js"></script>
     <script type="module" src="js/app.js"></script>
   </body>
