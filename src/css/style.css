@@ -1,4 +1,7 @@
-* {
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -23,45 +26,56 @@ html {
 }
 
 /* ===== БАЗОВЫЕ ПЕРЕМЕННЫЕ ===== */
+
 :root {
-  /* Светлая тема (по умолчанию) */
-  --bg-primary: #ffffff;
-  --bg-secondary: #f8f9fa;
-  --bg-header: #ffffff;
-  --text-primary: #1a1a2e;
-  --text-secondary: #4a4a6a;
-  --text-muted: #8888a8;
-  --border-color: #e0e0e8;
-  --shadow-color: rgba(0, 0, 0, 0.08);
-  --shadow-hover: rgba(0, 0, 0, 0.15);
-  --accent-color: #6862d4;
-  --accent-hover: #4338ca;
-  --header-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
 
-  /* Переходы для плавной смены темы */
-  --transition-speed: 0.3s;
+   /* ===== ОБЩИЕ ===== */
+    --transition-speed: 0.3s;
+    --font-title: "inglobal";
+    --font-text: "Mulish";
+    --header-height: 64px;
 
-  /* шрифты */
-  --font-title: "inglobal";
-  --font-text: "Mulish";
+    /* ===== СВЕТЛАЯ ТЕМА — ЗОЛОТО И ЖЁЛТО-ЗЕЛЁНЫЙ ===== */
+    --bg-primary: #e8f5e9;          
+    --bg-secondary: #d4ebd5;        
+    --bg-header: #e8f5e9;
+    --text-primary: #0d1f0d;       
+    --text-secondary: #2d4a2d;    
+    --text-muted: #5a7a5a;     
+    --border-color: #b8d8b8;       
+    
+    --shadow-color: rgba(13, 31, 13, 0.08);
+    --shadow-hover: rgba(13, 31, 13, 0.15);
+    --header-shadow: 0 2px 10px rgba(13, 31, 13, 0.06);
+    
+    --accent-color: #d4a017;        
+    --accent-hover: #b8860b;
+    
+    --color-olive: #7cb342;         
+    --color-gold: #d4a017;
+   
 
-   --header-height: 64px;
 }
 
-/* Тёмная тема */
 [data-theme="dark"] {
-  --bg-primary: #07070a;
-  --bg-secondary: #0b1a17;
-  --bg-header: #083312;
-  --text-primary: #e8e8f0;
-  --text-secondary: #b0b0c8;
-  --text-muted: #7a7a9a;
-  --border-color: #2a2a3e;
-  --shadow-color: rgba(0, 0, 0, 0.3);
-  --shadow-hover: rgba(0, 0, 0, 0.5);
-  --accent-color: #084d3b;
-  --accent-hover: #379944;
-  --header-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    /* ===== ТЁМНАЯ ТЕМА — ЧЁРНЫЙ И ТЁМНО-ЗЕЛЁНЫЙ ===== */
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #121a16;
+    --bg-header: #0d1610;
+    --text-primary: #e8f0e8;
+    --text-secondary: #a8b8a8;
+    --text-muted: #6a7a6a;
+    --border-color: #1e2e24;
+    
+    --shadow-color: rgba(0, 0, 0, 0.5);
+    --shadow-hover: rgba(0, 0, 0, 0.7);
+    --header-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+    
+    --accent-color: #2e8b57;
+    --accent-hover: #3cb371;
+    
+    --color-gold: #d4af37;
+    --color-emerald: #10b981;
 }
 
 /* ===== СТИЛИ ХЕДЕРА ===== */
@@ -120,10 +134,16 @@ html {
 }
 
 .logo-text {
-  /* font-size: 20px; */
+  background: linear-gradient(
+    135deg,
+    var(--text-primary) 0%,
+    var(--color-gold) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
   font-weight: 700;
   letter-spacing: -0.5px;
-  color: var(--text-primary);
   transition: color var(--transition-speed) ease;
   font-family: var(--font-title), sans-serif;
   font-size: 2.5rem;
@@ -145,7 +165,7 @@ html {
   display: inline-block;
   padding: 8px 16px;
   border-radius: 8px;
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 500;
   color: var(--text-secondary);
   text-decoration: none;
@@ -218,7 +238,7 @@ html {
 
 .toggle-thumb {
     position: absolute;
-    top: 2px;
+    top: 3px;
     left: 2px;
     width: 22px;
     height: 22px;
@@ -236,7 +256,7 @@ html {
 
 /* Иконки внутри бегунка */
 .toggle-thumb::before {
-    content: '☀️';
+    content: 'L';
     position: absolute;
     top: 50%;
     left: 50%;
@@ -246,13 +266,13 @@ html {
 }
 
 [data-theme="dark"] .toggle-thumb::before {
-    content: '🌙';
+    content: 'D';
 }
 
 /* Анимация вращения при смене темы */
-.theme-toggle.active .theme-icon {
+/* .theme-toggle.active .theme-icon {
   transform: rotate(180deg);
-}
+} */
 
 /* ===== БУРГЕР-МЕНЮ ===== */
 .menu-toggle {
@@ -333,20 +353,20 @@ html {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 1.5rem;
+  text-align: center;
 }
 
 .mobile-nav-link {
   display: block;
   padding: 14px 16px;
   border-radius: 12px;
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 500;
   color: var(--text-secondary);
   text-decoration: none;
   transition: all var(--transition-speed) ease;
   border: 1px solid transparent;
-
   opacity: 0;
   transform: translateX(-20px);
   animation: fadeInLink 0.3s ease forwards;
