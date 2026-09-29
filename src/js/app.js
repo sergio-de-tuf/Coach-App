@@ -58,6 +58,7 @@ import "./theme.js";
 import { initDatabase, getStudents, getTrainings } from "./database.js";
 import { initStudents } from "./students.js";
 import { initSchedule } from "./schedule.js";
+import { initTools } from './tools.js';
 
 async function updateDashboard() {
   try {
@@ -82,23 +83,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   console.log("🚀 Coach-App запущено");
 
   try {
-    // 1. Сначала база данных
     await initDatabase();
-    console.log("✅ База данных готова");
+        console.log('✅ База данных готова');
 
-    // 2. Потом всё остальное
-    await initStudents();
-    console.log("✅ Ученики загружены");
+        await initStudents();
+        console.log('✅ Ученики загружены');
 
-    await initSchedule();
-    console.log("✅ Расписание загружено");
+        await initSchedule();
+        console.log('✅ Расписание загружено');
 
-    // 3. Только теперь статистика — база уже готова
-    await updateDashboard();
-    console.log("✅ Статистика обновлена");
-  } catch (error) {
-    console.error("❌ Ошибка инициализации:", error);
-  }
+        await initTools();
+        console.log('✅ Инструменты загружены');
+
+        await updateDashboard();
+        console.log('✅ Статистика обновлена');
+
+    } catch (error) {
+        console.error('❌ Ошибка инициализации:', error);
+    }    
 });
 
 window.addEventListener("dashboard:update", updateDashboard);

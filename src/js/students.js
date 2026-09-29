@@ -105,12 +105,12 @@ function createStudentCard(student) {
             <div class="student-info">
                 <div class="student-info-item">
                     <span class="info-icon">📱</span>
-                    <span class="info-value">${phoneFormatted}</span>
+                    <a href="tel:${student.phone}" class="info-value info-link">${phoneFormatted}</a>
                 </div>
                 ${student.email ? `
                     <div class="student-info-item">
                         <span class="info-icon">✉️</span>
-                        <span class="info-value">${student.email}</span>
+                        <a href="mailto:${student.email}" class="info-value info-link">${student.email}</a>
                     </div>
                 ` : ''}
             </div>

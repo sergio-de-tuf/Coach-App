@@ -91,6 +91,11 @@
                 >Расписание</a
               >
             </li>
+            <li>
+              <a href="#tools" class="nav-link" data-section="toolsSection"
+                >Инструменты</a
+              >
+            </li>
           </ul>
         </nav>
         <!-- Правая часть: переключатель темы -->
@@ -239,6 +244,30 @@
           </div>
         </div>
       </section>
+
+      <!-- Секция "Инструменты" -->
+<section id="toolsSection" class="section">
+    <div class="section-header">
+        <h2 class="section-title">Инструменты</h2>
+    </div>
+
+    <!-- Секундомер -->
+    <div class="tool-card">
+        <h3 class="tool-title">⏱️ Секундомер</h3>
+        
+        <div class="stopwatch-display" id="stopwatchDisplay">00:00.00</div>
+        
+        <div class="stopwatch-controls">
+            <button id="stopwatchStart" class="btn btn-primary">▶ Старт</button>
+            <button id="stopwatchLap" class="btn btn-secondary" disabled>⏱ Круг</button>
+            <button id="stopwatchReset" class="btn btn-secondary" disabled>↺ Сброс</button>
+        </div>
+        
+        <!-- Список кругов -->
+        <div class="stopwatch-laps" id="stopwatchLaps"></div>
+    </div>
+</section>
+
       <!-- Модальное окно для добавления/редактирования ученика -->
       <div id="studentModal" class="modal">
         <div class="modal-content">
@@ -402,6 +431,7 @@
     </main>
     <!-- Подключение sql.js как глобального скрипта -->
     <script src="assets/sql-wasm.js"></script>
+    <script type="module" src="js/tools.js"></script>
     <script type="module" src="js/database.js"></script>
     <script type="module" src="js/students.js"></script>
     <script type="module" src="js/schedule.js"></script>

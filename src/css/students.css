@@ -279,6 +279,18 @@
   word-break: break-word;
 }
 
+.info-link {
+  color: var(--accent-color);
+  text-decoration: none;
+  transition: color var(--transition-speed) ease;
+  word-break: break-word;
+}
+
+.info-link:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
 .student-note {
   margin-top: 10px;
   padding: 10px 12px;
@@ -443,8 +455,13 @@ select.form-input {
 .form-input:focus,
 .form-textarea:focus {
   border-color: var(--accent-color);
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+  box-shadow: 0 0 0 3px rgba(212, 160, 23, 0.2);
   background: var(--bg-primary);
+}
+
+[data-theme="dark"] .form-input:focus,
+[data-theme="dark"] .form-textarea:focus {
+    box-shadow: 0 0 0 3px rgba(46, 139, 87, 0.25);
 }
 
 .form-textarea {
@@ -725,6 +742,106 @@ select.form-input {
   border-radius: 6px;
   margin-left: 8px;
   text-transform: uppercase;
+}
+
+/* ===== ИНСТРУМЕНТЫ ===== */
+.tool-card {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 20px;
+    transition: all var(--transition-speed) ease;
+}
+
+.tool-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.stopwatch-display {
+    font-size: 64px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    color: var(--accent-color);
+    text-align: center;
+    padding: 20px;
+    background: var(--bg-primary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+    user-select: none;
+    transition: color var(--transition-speed) ease;
+}
+
+.stopwatch-controls {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.stopwatch-laps {
+    margin-top: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.lap-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 14px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: var(--text-primary);
+    border-left: 3px solid var(--accent-color);
+}
+
+.lap-item .lap-number {
+    color: var(--text-muted);
+    font-weight: 600;
+}
+
+.lap-item .lap-time {
+    font-weight: 600;
+}
+
+.lap-item .lap-diff {
+    color: var(--accent-color);
+    font-size: 12px;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .stopwatch-display {
+        font-size: 48px;
+        padding: 16px;
+    }
+    
+    .stopwatch-controls {
+        flex-direction: column;
+    }
+    
+    .stopwatch-controls .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 400px) {
+    .stopwatch-display {
+        font-size: 36px;
+        letter-spacing: 1px;
+    }
+    
+    .tool-card {
+        padding: 16px;
+    }
 }
 
 /* Адаптив */

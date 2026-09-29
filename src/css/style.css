@@ -33,7 +33,7 @@ html {
     --transition-speed: 0.3s;
     --font-title: "inglobal";
     --font-text: "Mulish";
-    --header-height: 64px;
+    --header-height: 80px;
 
     /* ===== СВЕТЛАЯ ТЕМА — ЗОЛОТО И ЖЁЛТО-ЗЕЛЁНЫЙ ===== */
     --bg-primary: #e8f5e9;          
@@ -96,8 +96,7 @@ html {
   height: var(--header-height);
   max-width: 1200px;
   margin: 0 auto;
-  padding: 10px 20px;
-  height: 64px;
+  padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -116,7 +115,6 @@ html {
   display: flex;
   align-items: center;
   gap: 1rem;
-  /* text-decoration: none; */
   color: var(--text-primary);
   transition: color var(--transition-speed) ease;
 }
@@ -238,7 +236,7 @@ html {
 
 .toggle-thumb {
     position: absolute;
-    top: 3px;
+    top: 2px;
     left: 2px;
     width: 22px;
     height: 22px;
@@ -268,11 +266,6 @@ html {
 [data-theme="dark"] .toggle-thumb::before {
     content: 'D';
 }
-
-/* Анимация вращения при смене темы */
-/* .theme-toggle.active .theme-icon {
-  transform: rotate(180deg);
-} */
 
 /* ===== БУРГЕР-МЕНЮ ===== */
 .menu-toggle {
@@ -414,6 +407,17 @@ html {
 }
 
 /* ===== АДАПТИВНОСТЬ ===== */
+
+@media (max-width: 900px) {
+   .logo-icon img {
+  max-width: 36px;
+}
+
+  .logo-text {
+    font-size: 20px;
+  }
+}
+
 @media (max-width: 768px) {
   :root {
         --header-height: 60px;
@@ -467,12 +471,6 @@ html {
 
   .mobile-menu {
     top: var(--header-height);
-  }
-
-  .theme-toggle {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
   }
 }
 
