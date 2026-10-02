@@ -1,7 +1,7 @@
 /**
  * Модуль "Инструменты" — секундомер
  */
-
+import { initBoxingTimer } from './boxing-timer.js';
 // ===== СОСТОЯНИЕ =====
 let isRunning = false;
 let startTime = 0;
@@ -145,7 +145,7 @@ function initTools() {
             reset();
         }
     });
-    
+    initBoxingTimer();
     console.log('✅ Инструменты загружены');
 }
 

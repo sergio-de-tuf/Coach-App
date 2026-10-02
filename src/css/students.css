@@ -24,8 +24,9 @@
   justify-content: space-between;
   align-items: center;
   flex-wrap: wrap;
-  gap: 12px;
+  gap: 16px;
   margin-bottom: 24px;
+  text-align: center;
 }
 
 .section-title {
@@ -752,13 +753,171 @@ select.form-input {
     padding: 24px;
     margin-bottom: 20px;
     transition: all var(--transition-speed) ease;
+    text-align: center;
 }
 
 .tool-title {
-    font-size: 18px;
+    font-size: 2rem;
     font-weight: 600;
     color: var(--text-primary);
     margin-bottom: 20px;
+}
+
+/* ===== BOXING TIMER ===== */
+.boxing-settings {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.setting-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.setting-group label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.setting-group .form-input {
+    padding: 8px 12px;
+    font-size: 16px;
+    font-weight: 600;
+    text-align: center;
+}
+
+/* Пресеты */
+.boxing-presets {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.preset-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    font-family: 'Courier New', monospace;
+}
+
+.preset-btn:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    transform: translateY(-1px);
+}
+
+.preset-btn:active {
+    transform: scale(0.96);
+}
+
+/* Индикатор */
+.boxing-status {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+    transition: all var(--transition-speed) ease;
+}
+
+.boxing-phase {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+    transition: color var(--transition-speed) ease;
+}
+
+.boxing-timer-display {
+    font-size: 72px;
+    font-weight: 700;
+    font-family: 'Courier New', monospace;
+    color: var(--accent-color);
+    line-height: 1;
+    letter-spacing: 2px;
+    user-select: none;
+    transition: color var(--transition-speed) ease;
+}
+
+.boxing-round-info {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-top: 8px;
+    font-weight: 500;
+}
+
+/* Фазы */
+.boxing-status.phase-prep .boxing-phase { color: #f59e0b; }
+.boxing-status.phase-prep .boxing-timer-display { color: #f59e0b; }
+
+.boxing-status.phase-round .boxing-phase { color: #10b981; }
+.boxing-status.phase-round .boxing-timer-display { color: #10b981; }
+
+.boxing-status.phase-rest .boxing-phase { color: #3b82f6; }
+.boxing-status.phase-rest .boxing-timer-display { color: #3b82f6; }
+
+.boxing-status.phase-done .boxing-phase { color: var(--accent-color); }
+.boxing-status.phase-done .boxing-timer-display { 
+    color: var(--accent-color);
+    font-size: 48px;
+}
+
+/* Пульсация в последние 3 секунды раунда */
+.boxing-status.phase-round.warning .boxing-timer-display {
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .boxing-settings {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+    }
+    
+    .boxing-timer-display {
+        font-size: 56px;
+    }
+    
+    .preset-btn {
+        flex: 1 0 calc(50% - 3px);
+        text-align: center;
+    }
+}
+
+@media (max-width: 400px) {
+    .boxing-timer-display {
+        font-size: 48px;
+        letter-spacing: 1px;
+    }
+    
+    .boxing-settings {
+        grid-template-columns: 1fr 1fr;
+    }
+    
+    .setting-group:last-child {
+        grid-column: 1 / -1;
+    }
 }
 
 .stopwatch-display {
@@ -779,7 +938,7 @@ select.form-input {
 
 .stopwatch-controls {
     display: flex;
-    gap: 12px;
+    gap: 1.5rem;
     justify-content: center;
     flex-wrap: wrap;
 }
