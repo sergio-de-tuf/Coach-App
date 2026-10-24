@@ -4,61 +4,58 @@
 
 // ===== ПРОВЕРКА ОКРУЖЕНИЯ =====
 const isNative = () => {
-    return !!window?.Capacitor?.isNativePlatform?.();
+  return !!window?.Capacitor?.isNativePlatform?.();
 };
 
 // ===== ИНИЦИАЛИЗАЦИЯ БД =====
 let db = null;
 
 async function initDatabase() {
-    try {
-        if (isNative()) {
-            // Нативная платформа (Android) — используем Capacitor SQLite
-            const { CapacitorSQLite, SQLiteConnection } =
-                await import("@capacitor-community/sqlite");
-            const sqlite = new SQLiteConnection(CapacitorSQLite);
+  try {
+    if (isNative()) {
+      const { CapacitorSQLite, SQLiteConnection } =
+        await import("@capacitor-community/sqlite");
+      const sqlite = new SQLiteConnection(CapacitorSQLite);
 
-            db = await sqlite.createConnection(
-                "coach_app_db",
-                false,
-                "no-encryption",
-                1,
-            );
-            await db.open();
+      db = await sqlite.createConnection(
+        "coach_app_db",
+        false,
+        "no-encryption",
+        1,
+      );
+      await db.open();
 
-            console.log("✅ База данных SQLite инициализирована (нативная)");
-        } else {
-            // Веб-платформа — используем sql.js (для разработки)
-            const SQL = await window.initSqlJs({
-                locateFile: (file) => `assets/${file}`
-            });
+      console.log("✅ База данных SQLite инициализирована (нативная)");
+    } else {
+      const SQL = await window.initSqlJs({
+        locateFile: (file) => `assets/${file}`,
+      });
 
-            let dbData = null;
-            try {
-                const saved = localStorage.getItem("coach_app_db_data");
-                if (saved) {
-                    const buffer = Uint8Array.from(atob(saved), (c) => c.charCodeAt(0));
-                    dbData = new Uint8Array(buffer);
-                }
-            } catch (e) {}
-
-            db = new SQL.Database(dbData);
-            console.log("✅ База данных SQLite инициализирована (веб)");
+      let dbData = null;
+      try {
+        const saved = localStorage.getItem("coach_app_db_data");
+        if (saved) {
+          const buffer = Uint8Array.from(atob(saved), (c) => c.charCodeAt(0));
+          dbData = new Uint8Array(buffer);
         }
+      } catch (e) {}
 
-        // Создаём таблицы
-        await createTables();
-
-        return db;
-    } catch (error) {
-        console.error("❌ Ошибка инициализации БД:", error);
-        throw error;
+      db = new SQL.Database(dbData);
+      console.log("✅ База данных SQLite инициализирована (веб)");
     }
+
+    await createTables();
+
+    return db;
+  } catch (error) {
+    console.error("❌ Ошибка инициализации БД:", error);
+    throw error;
+  }
 }
 
 async function createTables() {
-    // Таблица учеников
-    await executeRun(`
+  // Таблица учеников
+  await executeRun(`
         CREATE TABLE IF NOT EXISTS students (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             first_name TEXT NOT NULL,
@@ -71,19 +68,21 @@ async function createTables() {
         )
     `);
 
-    await executeRun(`
+  await executeRun(`
         CREATE INDEX IF NOT EXISTS idx_students_name ON students(first_name, last_name)
     `);
 
-    await executeRun(`
+  await executeRun(`
         CREATE INDEX IF NOT EXISTS idx_students_phone ON students(phone)
     `);
 
-    // Таблица тренировок
-    await executeRun(`
-        CREATE TABLE IF NOT EXISTS trainings (
+  // Таблица тренировок (обновлённая схема)
+  await executeRun(`
+       CREATE TABLE IF NOT EXISTS trainings (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            student_id INTEGER NOT NULL,
+            student_id INTEGER,
+            training_type TEXT DEFAULT 'student',
+            group_name TEXT,
             date TEXT NOT NULL,
             time TEXT NOT NULL,
             place TEXT NOT NULL,
@@ -95,76 +94,98 @@ async function createTables() {
         )
     `);
 
-    await executeRun(`
+  await executeRun(`
         CREATE INDEX IF NOT EXISTS idx_trainings_date ON trainings(date)
     `);
 
-    await executeRun(`
+  await executeRun(`
         CREATE INDEX IF NOT EXISTS idx_trainings_student ON trainings(student_id)
     `);
 
-    console.log("✅ Таблицы созданы");
+  // Миграция: если старая таблица без training_type — добавим колонки
+  await migrateTrainings();
+
+  console.log("✅ Таблицы созданы");
+}
+
+// ===== МИГРАЦИЯ =====
+async function migrateTrainings() {
+  try {
+    const columns = await executeQuery("PRAGMA table_info(trainings)");
+    const names = columns.map(c => c.name);
+
+    if (!names.includes("training_type")) {
+      await executeRun("ALTER TABLE trainings ADD COLUMN training_type TEXT DEFAULT 'student'");
+      console.log("✅ Добавлена колонка training_type");
+    }
+    if (!names.includes("group_name")) {
+      await executeRun("ALTER TABLE trainings ADD COLUMN group_name TEXT");
+      console.log("✅ Добавлена колонка group_name");
+    }
+  } catch (e) {
+    console.warn("Миграция trainings:", e);
+  }
 }
 
 // ===== БАЗОВЫЕ ЗАПРОСЫ =====
 
 async function executeQuery(query, params = []) {
-    try {
-        if (isNative()) {
-            const result = await db.query(query, params);
-            return result.values || [];
-        } else {
-            const stmt = db.prepare(query);
-            stmt.bind(params);
-            const result = [];
-            while (stmt.step()) {
-                result.push(stmt.getAsObject());
-            }
-            stmt.free();
-            return result;
-        }
-    } catch (error) {
-        console.error("❌ Ошибка выполнения запроса:", error, query);
-        throw error;
+  try {
+    if (isNative()) {
+      const result = await db.query(query, params);
+      return result.values || [];
+    } else {
+      const stmt = db.prepare(query);
+      stmt.bind(params);
+      const result = [];
+      while (stmt.step()) {
+        result.push(stmt.getAsObject());
+      }
+      stmt.free();
+      return result;
     }
+  } catch (error) {
+    console.error("❌ Ошибка выполнения запроса:", error, query);
+    throw error;
+  }
 }
 
 async function executeRun(query, params = []) {
-    try {
-        if (isNative()) {
-            const result = await db.run(query, params);
-            return result;
-        } else {
-            const stmt = db.prepare(query);
-            stmt.run(params);
-            stmt.free();
-            const lastIdResult = db.exec("SELECT last_insert_rowid()");
-            const lastId = lastIdResult[0]?.values?.[0]?.[0] || 0;
-            return { changes: db.getRowsModified(), lastInsertRowid: lastId };
-        }
-    } catch (error) {
-        console.error("❌ Ошибка выполнения запроса:", error, query);
-        throw error;
+  try {
+    if (isNative()) {
+      const result = await db.run(query, params);
+      return result;
+    } else {
+      const stmt = db.prepare(query);
+      stmt.run(params);
+      stmt.free();
+      const lastIdResult = db.exec("SELECT last_insert_rowid()");
+      const lastId = lastIdResult[0]?.values?.[0]?.[0] || 0;
+      return { changes: db.getRowsModified(), lastInsertRowid: lastId };
     }
+  } catch (error) {
+    console.error("❌ Ошибка выполнения запроса:", error, query);
+    throw error;
+  }
 }
 
 // ===== СОХРАНЕНИЕ ВЕБ-БАЗЫ =====
 function saveWebDatabase() {
-    if (!isNative() && db) {
-        try {
-            const data = db.export();
-            const encoded = btoa(String.fromCharCode.apply(null, data));
-            localStorage.setItem("coach_app_db_data", encoded);
-        } catch (e) {
-            console.warn("Не удалось сохранить БД:", e);
-        }
+  if (!isNative() && db) {
+    try {
+      const data = db.export();
+      const encoded = btoa(String.fromCharCode.apply(null, data));
+      localStorage.setItem("coach_app_db_data", encoded);
+    } catch (e) {
+      console.warn("Не удалось сохранить БД:", e);
     }
+  }
 }
 
 // ===== ФУНКЦИИ ДЛЯ УЧЕНИКОВ =====
 
 async function getStudents() {
-    const query = `
+  const query = `
         SELECT 
             id, 
             first_name as firstName, 
@@ -177,12 +198,12 @@ async function getStudents() {
         FROM students 
         ORDER BY last_name ASC, first_name ASC
     `;
-    return await executeQuery(query);
+  return await executeQuery(query);
 }
 
 async function searchStudents(searchTerm) {
-    const term = `%${searchTerm}%`;
-    const query = `
+  const term = `%${searchTerm}%`;
+  const query = `
         SELECT 
             id, 
             first_name as firstName, 
@@ -198,33 +219,33 @@ async function searchStudents(searchTerm) {
            OR phone LIKE ?
         ORDER BY last_name ASC, first_name ASC
     `;
-    return await executeQuery(query, [term, term, term]);
+  return await executeQuery(query, [term, term, term]);
 }
 
 async function addStudent(student) {
-    const query = `
+  const query = `
         INSERT INTO students (first_name, last_name, phone, email, note)
         VALUES (?, ?, ?, ?, ?)
     `;
-    const params = [
-        student.firstName,
-        student.lastName,
-        student.phone,
-        student.email || null,
-        student.note || null
-    ];
+  const params = [
+    student.firstName,
+    student.lastName,
+    student.phone,
+    student.email || null,
+    student.note || null,
+  ];
 
-    const result = await executeRun(query, params);
+  const result = await executeRun(query, params);
 
-    if (!isNative()) {
-        saveWebDatabase();
-    }
+  if (!isNative()) {
+    saveWebDatabase();
+  }
 
-    return result;
+  return result;
 }
 
 async function updateStudent(id, student) {
-    const query = `
+  const query = `
         UPDATE students 
         SET first_name = ?, 
             last_name = ?, 
@@ -234,37 +255,37 @@ async function updateStudent(id, student) {
             updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
     `;
-    const params = [
-        student.firstName,
-        student.lastName,
-        student.phone,
-        student.email || null,
-        student.note || null,
-        id
-    ];
+  const params = [
+    student.firstName,
+    student.lastName,
+    student.phone,
+    student.email || null,
+    student.note || null,
+    id,
+  ];
 
-    const result = await executeRun(query, params);
+  const result = await executeRun(query, params);
 
-    if (!isNative()) {
-        saveWebDatabase();
-    }
+  if (!isNative()) {
+    saveWebDatabase();
+  }
 
-    return result;
+  return result;
 }
 
 async function deleteStudent(id) {
-    const query = "DELETE FROM students WHERE id = ?";
-    const result = await executeRun(query, [id]);
+  const query = "DELETE FROM students WHERE id = ?";
+  const result = await executeRun(query, [id]);
 
-    if (!isNative()) {
-        saveWebDatabase();
-    }
+  if (!isNative()) {
+    saveWebDatabase();
+  }
 
-    return result;
+  return result;
 }
 
 async function getStudentById(id) {
-    const query = `
+  const query = `
         SELECT 
             id, 
             first_name as firstName, 
@@ -275,17 +296,19 @@ async function getStudentById(id) {
         FROM students 
         WHERE id = ?
     `;
-    const results = await executeQuery(query, [id]);
-    return results[0] || null;
+  const results = await executeQuery(query, [id]);
+  return results[0] || null;
 }
 
 // ===== ФУНКЦИИ ДЛЯ ТРЕНИРОВОК =====
 
 async function getTrainings() {
-    const query = `
+  const query = `
         SELECT 
             t.id,
             t.student_id as studentId,
+            t.training_type as trainingType,
+            t.group_name as groupName,
             t.date,
             t.time,
             t.place,
@@ -298,14 +321,16 @@ async function getTrainings() {
         LEFT JOIN students s ON s.id = t.student_id
         ORDER BY t.date DESC, t.time DESC
     `;
-    return await executeQuery(query);
+  return await executeQuery(query);
 }
 
 async function getTrainingsByStudent(studentId) {
-    const query = `
+  const query = `
         SELECT 
             id, 
             student_id as studentId, 
+            training_type as trainingType,
+            group_name as groupName,
             date, 
             time, 
             place, 
@@ -315,14 +340,16 @@ async function getTrainingsByStudent(studentId) {
         WHERE student_id = ?
         ORDER BY date DESC, time DESC
     `;
-    return await executeQuery(query, [studentId]);
+  return await executeQuery(query, [studentId]);
 }
 
 async function getTrainingById(id) {
-    const query = `
+  const query = `
         SELECT 
             id, 
             student_id as studentId, 
+            training_type as trainingType,
+            group_name as groupName,
             date, 
             time, 
             place, 
@@ -331,37 +358,41 @@ async function getTrainingById(id) {
         FROM trainings 
         WHERE id = ?
     `;
-    const results = await executeQuery(query, [id]);
-    return results[0] || null;
+  const results = await executeQuery(query, [id]);
+  return results[0] || null;
 }
 
 async function addTraining(training) {
-    const query = `
-        INSERT INTO trainings (student_id, date, time, place, duration, note)
-        VALUES (?, ?, ?, ?, ?, ?)
+  const query = `
+        INSERT INTO trainings (student_id, training_type, group_name, date, time, place, duration, note)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
-    const params = [
-        training.studentId,
-        training.date,
-        training.time,
-        training.place,
-        training.duration || null,
-        training.note || null
-    ];
+  const params = [
+    training.studentId || null,
+    training.trainingType || 'student',
+    training.groupName || null,
+    training.date,
+    training.time,
+    training.place,
+    training.duration || null,
+    training.note || null,
+  ];
 
-    const result = await executeRun(query, params);
+  const result = await executeRun(query, params);
 
-    if (!isNative()) {
-        saveWebDatabase();
-    }
+  if (!isNative()) {
+    saveWebDatabase();
+  }
 
-    return result;
+  return result;
 }
 
 async function updateTraining(id, training) {
-    const query = `
+  const query = `
         UPDATE trainings 
         SET student_id = ?, 
+            training_type = ?,
+            group_name = ?,
             date = ?, 
             time = ?, 
             place = ?, 
@@ -370,50 +401,52 @@ async function updateTraining(id, training) {
             updated_at = CURRENT_TIMESTAMP
         WHERE id = ?
     `;
-    const params = [
-        training.studentId,
-        training.date,
-        training.time,
-        training.place,
-        training.duration || null,
-        training.note || null,
-        id
-    ];
+  const params = [
+    training.studentId || null,
+    training.trainingType || 'student',
+    training.groupName || null,
+    training.date,
+    training.time,
+    training.place,
+    training.duration || null,
+    training.note || null,
+    id,
+  ];
 
-    const result = await executeRun(query, params);
+  const result = await executeRun(query, params);
 
-    if (!isNative()) {
-        saveWebDatabase();
-    }
+  if (!isNative()) {
+    saveWebDatabase();
+  }
 
-    return result;
+  return result;
 }
 
 async function deleteTraining(id) {
-    const query = "DELETE FROM trainings WHERE id = ?";
-    const result = await executeRun(query, [id]);
+  const query = "DELETE FROM trainings WHERE id = ?";
+  const result = await executeRun(query, [id]);
 
-    if (!isNative()) {
-        saveWebDatabase();
-    }
+  if (!isNative()) {
+    saveWebDatabase();
+  }
 
-    return result;
+  return result;
 }
 
 // ===== ЭКСПОРТ =====
 export {
-    initDatabase,
-    getStudents,
-    searchStudents,
-    addStudent,
-    updateStudent,
-    deleteStudent,
-    getStudentById,
-    getTrainings,
-    getTrainingsByStudent,
-    getTrainingById,
-    addTraining,
-    updateTraining,
-    deleteTraining,
-    isNative
+  initDatabase,
+  getStudents,
+  searchStudents,
+  addStudent,
+  updateStudent,
+  deleteStudent,
+  getStudentById,
+  getTrainings,
+  getTrainingsByStudent,
+  getTrainingById,
+  addTraining,
+  updateTraining,
+  deleteTraining,
+  isNative,
 };

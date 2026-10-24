@@ -484,6 +484,75 @@ select.form-input {
   justify-content: center;
 }
 
+/* ===== ПЕРЕКЛЮЧАТЕЛЬ ТИПА ТРЕНИРОВКИ ===== */
+.training-type-toggle {
+    display: flex;
+    gap: 8px;
+}
+
+.radio-label {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border: 2px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    user-select: none;
+}
+
+.radio-label:hover {
+    border-color: var(--accent-color);
+    color: var(--text-primary);
+}
+
+.radio-label input[type="radio"] {
+    display: none;   /* скрываем стандартную радио-кнопку */
+}
+
+.radio-label:has(input:checked) {
+    border-color: var(--accent-color);
+    background: rgba(212, 160, 23, 0.1);   /* золотой фон */
+    color: var(--accent-color);
+    font-weight: 700;
+}
+
+[data-theme="dark"] .radio-label:has(input:checked) {
+    background: rgba(46, 139, 87, 0.15);   /* изумрудный */
+}
+
+/* ===== ГРУППА В КАРТОЧКЕ ТРЕНИРОВКИ ===== */
+.training-group-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--accent-color);
+    color: white;
+    font-size: 11px;
+    font-weight: 600;
+    border-radius: 6px;
+    margin-left: 8px;
+    text-transform: uppercase;
+}
+
+.training-group-name {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.training-group-name .group-icon {
+    font-size: 16px;
+}
+
 /* ===== АДАПТИВНОСТЬ ===== */
 @media (max-width: 768px) {
   .section-header {

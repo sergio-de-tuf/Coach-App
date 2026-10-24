@@ -518,3 +518,278 @@ body.menu-open .main-content {
 * {
   -webkit-tap-highlight-color: transparent;
 }
+/* Добавил изображение */
+.section-hero {
+  min-height: 100vh;
+  padding: 2rem;
+  border-radius: 1rem;
+  background-color: #fff;
+  background-image: url('../assets/images/1.png');
+  background-position: center center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+/* ===== КАЛЕНДАРЬ ===== */
+.calendar-card {
+    margin-top: 24px;
+    background: rgba(255, 255, 255, 0.92);      /* полупрозрачная подложка на фоне картинки */
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: background var(--transition-speed) ease,
+                border-color var(--transition-speed) ease;
+}
+
+[data-theme="dark"] .calendar-card {
+    background: rgba(18, 26, 22, 0.92);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.calendar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.calendar-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+    text-transform: capitalize;
+    margin: 0;
+}
+
+.calendar-nav {
+    width: 36px;
+    height: 36px;
+    border: 1px solid var(--border-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-radius: 10px;
+    font-size: 20px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+}
+
+.calendar-nav:hover {
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+}
+
+.calendar-nav:active {
+    transform: scale(0.94);
+}
+
+/* Дни недели */
+.calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    margin-bottom: 8px;
+}
+
+.calendar-weekdays span {
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    padding: 4px 0;
+}
+
+/* Сетка дней */
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+}
+
+.calendar-day {
+    aspect-ratio: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all var(--transition-speed) ease;
+    position: relative;
+    border: 1px solid transparent;
+    background: var(--bg-primary);
+    user-select: none;
+}
+
+.calendar-day:hover {
+    border-color: var(--accent-color);
+    transform: scale(1.05);
+}
+
+.calendar-day.empty {
+    background: transparent;
+    cursor: default;
+    pointer-events: none;
+}
+
+.calendar-day.empty:hover {
+    transform: none;
+    border-color: transparent;
+}
+
+.calendar-day.today {
+    background: var(--accent-color);
+    color: white;
+    font-weight: 700;
+}
+
+.calendar-day.today .calendar-dot {
+    background: white;
+}
+
+.calendar-day.other-month {
+    opacity: 0.35;
+}
+
+/* Точки тренировок */
+.calendar-dots {
+    display: flex;
+    gap: 2px;
+    height: 4px;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-dot {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent-color);
+}
+
+.calendar-day.today .calendar-dot {
+    background: white;
+}
+
+/* Информация о дне */
+.calendar-day-info {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-color);
+    font-size: 14px;
+    color: var(--text-secondary);
+    min-height: 0;
+    transition: all var(--transition-speed) ease;
+}
+
+.calendar-day-info:empty {
+    display: none;
+    margin: 0;
+    padding: 0;
+    border: none;
+}
+
+.calendar-day-info-title {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.calendar-day-training {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-primary);
+    border-radius: 8px;
+    margin-bottom: 6px;
+    border-left: 3px solid var(--accent-color);
+}
+
+.calendar-day-training:last-child {
+    margin-bottom: 0;
+}
+
+.calendar-day-training .training-time {
+    font-weight: 600;
+    color: var(--accent-color);
+    font-size: 13px;
+    min-width: 45px;
+}
+
+.calendar-day-training .training-student {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 13px;
+    flex: 1;
+}
+
+.calendar-day-training .training-place {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+/* Адаптив */
+@media (max-width: 768px) {
+    .calendar-card {
+        padding: 16px;
+    }
+
+    .calendar-title {
+        font-size: 17px;
+    }
+
+    .calendar-nav {
+        width: 32px;
+        height: 32px;
+        font-size: 18px;
+    }
+
+    .calendar-day {
+        font-size: 13px;
+        border-radius: 8px;
+    }
+
+    .calendar-weekdays span {
+        font-size: 10px;
+    }
+}
+
+@media (max-width: 400px) {
+    .calendar-card {
+        padding: 12px;
+    }
+
+    .calendar-day {
+        font-size: 12px;
+        border-radius: 6px;
+    }
+
+    .calendar-dot {
+        width: 3px;
+        height: 3px;
+    }
+
+    .calendar-day-training {
+        flex-wrap: wrap;
+        gap: 4px;
+    }
+
+    .calendar-day-training .training-place {
+        width: 100%;
+        padding-left: 53px;
+    }
+}

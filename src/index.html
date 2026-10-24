@@ -162,28 +162,55 @@
     <!-- Основной контент -->
     <main class="main-content">
       <!-- Секция "Главная" -->
-      <section id="dashboardSection" class="section active">
-        <div class="section-header">
-          <h2 class="section-title">🏠 Главная</h2>
-        </div>
-        <div class="dashboard-grid">
-          <div class="dashboard-card">
+      <section id="dashboardSection" class="section section-hero active">
+    <div class="section-header">
+        <h2 class="section-title">🏠 Главная</h2>
+    </div>
+    
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
             <span class="dashboard-icon">👥</span>
             <span class="dashboard-value" id="dashboardStudentsCount">0</span>
             <span class="dashboard-label">Учеников</span>
-          </div>
-          <div class="dashboard-card">
+        </div>
+        <div class="dashboard-card">
             <span class="dashboard-icon">📅</span>
             <span class="dashboard-value" id="dashboardTrainingsCount">0</span>
             <span class="dashboard-label">Тренировок</span>
-          </div>
-          <div class="dashboard-card">
+        </div>
+        <div class="dashboard-card">
             <span class="dashboard-icon">🕐</span>
             <span class="dashboard-value" id="dashboardUpcomingCount">0</span>
             <span class="dashboard-label">Предстоящих</span>
-          </div>
         </div>
-      </section>
+    </div>
+
+    <!-- ===== КАЛЕНДАРЬ ===== -->
+    <div class="calendar-card">
+        <div class="calendar-header">
+            <button class="calendar-nav" id="calendarPrev" aria-label="Предыдущий месяц">‹</button>
+            <h3 class="calendar-title" id="calendarTitle">Октябрь 2026</h3>
+            <button class="calendar-nav" id="calendarNext" aria-label="Следующий месяц">›</button>
+        </div>
+        
+        <div class="calendar-weekdays">
+            <span>Пн</span>
+            <span>Вт</span>
+            <span>Ср</span>
+            <span>Чт</span>
+            <span>Пт</span>
+            <span>Сб</span>
+            <span>Вс</span>
+        </div>
+        
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Дни генерируются через JS -->
+        </div>
+
+        <!-- Тренировки выбранного дня -->
+        <div class="calendar-day-info" id="calendarDayInfo"></div>
+    </div>
+</section>
       <!-- Секция "Ученики" -->
       <section id="studentsSection" class="section active">
         <div class="section-header">
@@ -460,94 +487,136 @@
 
       <!-- Модальное окно для тренировки -->
       <div id="trainingModal" class="modal">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h3 id="trainingModalTitle">Добавить тренировку</h3>
-            <button class="modal-close" id="closeTrainingModal">&times;</button>
-          </div>
-          <form id="trainingForm" class="student-form">
-            <input type="hidden" id="trainingId" value="" />
-            <div class="form-group">
-              <label for="trainingStudent"
-                >Ученик <span class="required">*</span></label
-              >
-              <select id="trainingStudent" class="form-input" required>
-                <option value="">Выберите ученика</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label for="trainingDate"
-                >Дата <span class="required">*</span></label
-              >
-              <input
-                type="date"
-                id="trainingDate"
-                class="form-input"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="trainingTime"
-                >Время <span class="required">*</span></label
-              >
-              <input
-                type="time"
-                id="trainingTime"
-                class="form-input"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="trainingPlace"
-                >Место <span class="required">*</span></label
-              >
-              <input
-                type="text"
-                id="trainingPlace"
-                class="form-input"
-                placeholder="Например: Зал на Ленина, 15"
-                required
-              />
-            </div>
-            <div class="form-group">
-              <label for="trainingDuration">Длительность (мин)</label>
-              <input
-                type="number"
-                id="trainingDuration"
-                class="form-input"
-                placeholder="60"
-                min="15"
-                step="15"
-              />
-            </div>
-            <div class="form-group">
-              <label for="trainingNote">Заметка</label>
-              <textarea
-                id="trainingNote"
-                class="form-textarea"
-                rows="3"
-                placeholder="Дополнительная информация..."
-              ></textarea>
-            </div>
-            <div class="form-actions">
-              <button
-                type="button"
-                class="btn btn-secondary"
-                id="cancelTrainingBtn"
-              >
-                Отмена
-              </button>
-              <button
-                type="submit"
-                class="btn btn-primary"
-                id="saveTrainingBtn"
-              >
-                <span id="saveTrainingBtnText">Сохранить</span>
-              </button>
-            </div>
-          </form>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 id="trainingModalTitle">Добавить тренировку</h3>
+      <button class="modal-close" id="closeTrainingModal">&times;</button>
+    </div>
+    <form id="trainingForm" class="student-form">
+      <input type="hidden" id="trainingId" value="" />
+
+      <!-- Тип тренировки -->
+      <div class="form-group">
+        <label>Тип тренировки <span class="required">*</span></label>
+        <div class="training-type-toggle">
+          <label class="radio-label">
+            <input type="radio" name="trainingType" value="student" checked />
+            <span>👤 Ученик</span>
+          </label>
+          <label class="radio-label">
+            <input type="radio" name="trainingType" value="group" />
+            <span>👥 Группа</span>
+          </label>
         </div>
       </div>
+
+      <!-- Выбор ученика (для типа "student") -->
+      <div class="form-group" id="studentSelectGroup">
+        <label for="trainingStudent"
+          >Ученик <span class="required">*</span></label
+        >
+        <select id="trainingStudent" class="form-input" required>
+          <option value="">Выберите ученика</option>
+        </select>
+      </div>
+
+      <!-- Название группы (для типа "group") -->
+      <div class="form-group" id="groupNameGroup" style="display: none">
+        <label for="trainingGroupName"
+          >Название группы <span class="required">*</span></label
+        >
+        <input
+          type="text"
+          id="trainingGroupName"
+          class="form-input"
+          placeholder="Например: Утренняя группа"
+        />
+      </div>
+
+      <!-- Дата -->
+      <div class="form-group">
+        <label for="trainingDate"
+          >Дата <span class="required">*</span></label
+        >
+        <input
+          type="date"
+          id="trainingDate"
+          class="form-input"
+          required
+        />
+      </div>
+
+      <!-- Время -->
+      <div class="form-group">
+        <label for="trainingTime"
+          >Время <span class="required">*</span></label
+        >
+        <input
+          type="time"
+          id="trainingTime"
+          class="form-input"
+          required
+        />
+      </div>
+
+      <!-- Место -->
+      <div class="form-group">
+        <label for="trainingPlace"
+          >Место <span class="required">*</span></label
+        >
+        <input
+          type="text"
+          id="trainingPlace"
+          class="form-input"
+          placeholder="Например: Зал на Ленина, 15"
+          required
+        />
+      </div>
+
+      <!-- Длительность -->
+      <div class="form-group">
+        <label for="trainingDuration">Длительность (мин)</label>
+        <input
+          type="number"
+          id="trainingDuration"
+          class="form-input"
+          placeholder="60"
+          min="15"
+          step="15"
+        />
+      </div>
+
+      <!-- Заметка -->
+      <div class="form-group">
+        <label for="trainingNote">Заметка</label>
+        <textarea
+          id="trainingNote"
+          class="form-textarea"
+          rows="3"
+          placeholder="Дополнительная информация..."
+        ></textarea>
+      </div>
+
+      <!-- Кнопки -->
+      <div class="form-actions">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="cancelTrainingBtn"
+        >
+          Отмена
+        </button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          id="saveTrainingBtn"
+        >
+          <span id="saveTrainingBtnText">Сохранить</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
     </main>
     <!-- Подключение sql.js как глобального скрипта -->
     <script src="assets/sql-wasm.js"></script>

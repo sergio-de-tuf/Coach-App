@@ -39,6 +39,12 @@ const trainingDuration = document.getElementById('trainingDuration');
 const trainingNote = document.getElementById('trainingNote');
 const saveTrainingBtnText = document.getElementById('saveTrainingBtnText');
 
+// Новые элементы для типа тренировки
+const trainingTypeRadios = document.querySelectorAll('input[name="trainingType"]');
+const studentSelectGroup = document.getElementById('studentSelectGroup');
+const groupNameGroup = document.getElementById('groupNameGroup');
+const trainingGroupName = document.getElementById('trainingGroupName');
+
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 
 async function initSchedule() {
@@ -55,14 +61,18 @@ async function initSchedule() {
 // ===== ЗАГРУЗКА ДАННЫХ =====
 
 async function loadStudentsForSelect() {
-    const students = await getStudents();
-    trainingStudent.innerHTML = '<option value="">Выберите ученика</option>';
-    students.forEach(s => {
-        const option = document.createElement('option');
-        option.value = s.id;
-        option.textContent = `${s.firstName} ${s.lastName}`;
-        trainingStudent.appendChild(option);
-    });
+    try {
+        const students = await getStudents();
+        trainingStudent.innerHTML = '<option value="">Выберите ученика</option>';
+        students.forEach(s => {
+            const option = document.createElement('option');
+            option.value = s.id;
+            option.textContent = `${s.firstName} ${s.lastName}`;
+            trainingStudent.appendChild(option);
+        });
+    } catch (error) {
+        console.error('Ошибка загрузки учеников для селекта:', error);
+    }
 }
 
 async function loadTrainings() {
@@ -74,7 +84,10 @@ async function loadTrainings() {
             const term = searchTerm.toLowerCase();
             trainings = trainings.filter(t => {
                 const studentName = `${t.studentFirstName || ''} ${t.studentLastName || ''}`.toLowerCase();
-                return t.place.toLowerCase().includes(term) || studentName.includes(term);
+                const groupName = (t.groupName || '').toLowerCase();
+                return t.place.toLowerCase().includes(term)
+                    || studentName.includes(term)
+                    || groupName.includes(term);
             });
         }
 
@@ -124,9 +137,15 @@ function createTrainingCard(training) {
     const isToday = training.date === today;
     const isPast = training.date < today;
 
-    const studentName = training.studentFirstName
-        ? `${training.studentFirstName} ${training.studentLastName}`
-        : 'Ученик не найден';
+    // Определяем, что показывать: ученика или группу
+    const isGroup = training.trainingType === 'group';
+    const displayName = isGroup
+        ? training.groupName || 'Группа'
+        : (training.studentFirstName
+            ? `${training.studentFirstName} ${training.studentLastName}`
+            : 'Ученик не найден');
+
+    const groupBadge = isGroup ? '<span class="training-group-badge">Группа</span>' : '';
 
     return `
         <div class="training-card ${isPast ? 'past' : ''}" data-id="${training.id}">
@@ -139,7 +158,8 @@ function createTrainingCard(training) {
                 <div class="training-header">
                     <div>
                         <div class="training-student">
-                            ${studentName}
+                            ${isGroup ? '👥' : '👤'} ${displayName}
+                            ${groupBadge}
                             ${isToday ? '<span class="training-today">Сегодня</span>' : ''}
                         </div>
                     </div>
@@ -186,6 +206,23 @@ function getWordForm(number, one, two, five) {
     return five;
 }
 
+// ===== ПЕРЕКЛЮЧЕНИЕ ТИПА ТРЕНИРОВКИ =====
+
+function toggleTrainingType(type) {
+    if (type === 'group') {
+        studentSelectGroup.style.display = 'none';
+        groupNameGroup.style.display = 'block';
+        trainingStudent.removeAttribute('required');
+        trainingGroupName.setAttribute('required', 'required');
+        setTimeout(() => trainingGroupName.focus(), 100);
+    } else {
+        studentSelectGroup.style.display = 'block';
+        groupNameGroup.style.display = 'none';
+        trainingGroupName.removeAttribute('required');
+        trainingStudent.setAttribute('required', 'required');
+    }
+}
+
 // ===== ОБРАБОТЧИКИ =====
 
 function setupEventListeners() {
@@ -222,6 +259,13 @@ function setupEventListeners() {
     // Отправка формы
     trainingForm.addEventListener('submit', handleTrainingSubmit);
 
+    // Переключение типа тренировки
+    trainingTypeRadios.forEach(radio => {
+        radio.addEventListener('change', (e) => {
+            toggleTrainingType(e.target.value);
+        });
+    });
+
     // Делегирование для кнопок в карточках
     trainingsList.addEventListener('click', (e) => {
         const editBtn = e.target.closest('.edit-training-btn');
@@ -251,6 +295,11 @@ function openAddTrainingModal() {
     saveTrainingBtnText.textContent = 'Сохранить';
     trainingId.value = '';
     trainingForm.reset();
+
+    // Сброс на "Ученик"
+    trainingTypeRadios.forEach(r => r.checked = r.value === 'student');
+    toggleTrainingType('student');
+
     // Устанавливаем сегодняшнюю дату по умолчанию
     trainingDate.value = new Date().toISOString().split('T')[0];
     trainingModal.classList.add('open');
@@ -269,7 +318,19 @@ async function openEditTrainingModal(id) {
         trainingModalTitle.textContent = 'Редактировать тренировку';
         saveTrainingBtnText.textContent = 'Обновить';
         trainingId.value = id;
-        trainingStudent.value = training.studentId;
+
+        // Устанавливаем тип
+        const type = training.trainingType || 'student';
+        trainingTypeRadios.forEach(r => r.checked = r.value === type);
+        toggleTrainingType(type);
+
+        // Заполняем поля
+        if (type === 'student') {
+            trainingStudent.value = training.studentId || '';
+        } else {
+            trainingGroupName.value = training.groupName || '';
+        }
+
         trainingDate.value = training.date;
         trainingTime.value = training.time;
         trainingPlace.value = training.place || '';
@@ -294,30 +355,49 @@ function closeTrainingModalFunc() {
 async function handleTrainingSubmit(e) {
     e.preventDefault();
 
-    const studentId = trainingStudent.value;
+    const type = document.querySelector('input[name="trainingType"]:checked')?.value || 'student';
     const date = trainingDate.value;
     const time = trainingTime.value;
     const place = trainingPlace.value.trim();
 
-    if (!studentId) {
-        showError('Выберите ученика');
-        return;
+    // Валидация
+    if (type === 'student') {
+        const studentId = trainingStudent.value;
+        if (!studentId) {
+            showError('Выберите ученика');
+            trainingStudent.focus();
+            return;
+        }
+    } else {
+        const groupName = trainingGroupName.value.trim();
+        if (!groupName) {
+            showError('Введите название группы');
+            trainingGroupName.focus();
+            return;
+        }
     }
+
     if (!date) {
         showError('Выберите дату');
+        trainingDate.focus();
         return;
     }
     if (!time) {
         showError('Выберите время');
+        trainingTime.focus();
         return;
     }
     if (!place) {
         showError('Введите место');
+        trainingPlace.focus();
         return;
     }
 
+    // Подготовка данных
     const trainingData = {
-        studentId: parseInt(studentId),
+        trainingType: type,
+        studentId: type === 'student' ? parseInt(trainingStudent.value) : null,
+        groupName: type === 'group' ? trainingGroupName.value.trim() : null,
         date,
         time,
         place,
@@ -348,11 +428,14 @@ function confirmDeleteTraining(id) {
     const training = allTrainings.find(t => t.id === id);
     if (!training) return;
 
-    const studentName = training.studentFirstName
-        ? `${training.studentFirstName} ${training.studentLastName}`
-        : 'ученика';
+    const isGroup = training.trainingType === 'group';
+    const displayName = isGroup
+        ? training.groupName || 'группа'
+        : (training.studentFirstName
+            ? `${training.studentFirstName} ${training.studentLastName}`
+            : 'ученик');
 
-    if (confirm(`Удалить тренировку "${studentName}" от ${training.date}?`)) {
+    if (confirm(`Удалить тренировку "${displayName}" от ${training.date}?`)) {
         deleteTrainingHandler(id);
     }
 }
