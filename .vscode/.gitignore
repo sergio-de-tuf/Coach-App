@@ -1,0 +1,20 @@
+# Зависимости
+node_modules/
+
+# Сборка (если появится)
+dist/
+build/
+
+# Секреты
+.env
+.env.local
+
+# IDE и ОС
+.idea/
+.vscode/
+.DS_Store
+*.log
+
+# Временные файлы
+*.tmp
+*.bak
