@@ -25,8 +25,6 @@ html {
   font-display: swap;
 }
 
-/* ===== БАЗОВЫЕ ПЕРЕМЕННЫЕ ===== */
-
 :root {
 
    /* ===== ОБЩИЕ ===== */
@@ -96,7 +94,7 @@ html {
   height: var(--header-height);
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 10px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -109,6 +107,7 @@ html {
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  margin: .5rem 0;
 }
 
 .logo {
@@ -489,7 +488,7 @@ section {
   margin: 2rem auto;
 }
 
-/* Стиль для контента (пример) */
+/* Стиль для контента */
 .main-content {
   max-width: 1200px;
   margin: 1rem auto;
@@ -518,22 +517,11 @@ body.menu-open .main-content {
 * {
   -webkit-tap-highlight-color: transparent;
 }
-/* Добавил изображение */
-.section-hero {
-  min-height: 100vh;
-  padding: 2rem;
-  border-radius: 1rem;
-  background-color: #fff;
-  background-image: url('../assets/images/1.png');
-  background-position: center center;
-  background-size: cover;
-  background-repeat: no-repeat;
-}
 
 /* ===== КАЛЕНДАРЬ ===== */
 .calendar-card {
     margin-top: 24px;
-    background: rgba(255, 255, 255, 0.92);      /* полупрозрачная подложка на фоне картинки */
+    background: rgba(255, 255, 255, 0.92); 
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     border: 1px solid var(--border-color);
@@ -553,7 +541,7 @@ body.menu-open .main-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    margin: 1.2rem 0;
 }
 
 .calendar-title {
@@ -673,8 +661,8 @@ body.menu-open .main-content {
 }
 
 .calendar-dot {
-    width: 4px;
-    height: 4px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
     background: var(--accent-color);
 }
@@ -704,8 +692,8 @@ body.menu-open .main-content {
 .calendar-day-info-title {
     font-weight: 600;
     color: var(--text-primary);
-    margin-bottom: 8px;
-    font-size: 14px;
+    margin-bottom: 1rem;
+    font-size: 16px;
 }
 
 .calendar-day-training {

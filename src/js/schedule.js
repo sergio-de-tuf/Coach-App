@@ -158,7 +158,7 @@ function createTrainingCard(training) {
                 <div class="training-header">
                     <div>
                         <div class="training-student">
-                            ${isGroup ? '👥' : '👤'} ${displayName}
+                            ${displayName}
                             ${groupBadge}
                             ${isToday ? '<span class="training-today">Сегодня</span>' : ''}
                         </div>
@@ -170,12 +170,10 @@ function createTrainingCard(training) {
                 </div>
                 
                 <div class="training-time">
-                    <span>🕐</span>
                     <span>${training.time}</span>
                 </div>
                 
                 <div class="training-place">
-                    <span>📍</span>
                     <span>${training.place}</span>
                 </div>
                 

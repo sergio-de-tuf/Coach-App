@@ -35,6 +35,15 @@
   color: var(--text-primary);
   margin: 0;
   transition: color var(--transition-speed) ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.section-title-logo {
+  width: 2.5rem;
+  height: 2.5rem;
 }
 
 /* ===== КНОПКИ ===== */
@@ -132,6 +141,11 @@
 .dashboard-icon {
   font-size: 32px;
   line-height: 1;
+}
+
+.dashboard-icon-img {
+  max-width: 2.5rem;
+  max-height: 2.5rem;
 }
 
 .dashboard-value {
@@ -741,8 +755,14 @@ select.form-input {
 
 .training-student {
   font-size: 16px;
-  font-weight: 600;
+  font-weight: 500;
   color: var(--text-primary);
+  letter-spacing: 1px;
+}
+
+.training-group-badge {
+  margin-top: 0.5rem;
+  margin-left: 0;
 }
 
 .training-time {

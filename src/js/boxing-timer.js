@@ -13,7 +13,7 @@
 let boxingState = {
     isRunning: false,
     currentPhase: 'idle',      // idle | prep | round | rest | done
-    timeLeft: 0,               // секунды
+    timeLeft: 0,               
     currentRound: 0,
     totalRounds: 3,
     roundTime: 120,
@@ -183,7 +183,7 @@ function updateUI() {
         phaseEl.textContent = 'Подготовка';
     } else if (boxingState.currentPhase === 'round') {
         statusBlock.classList.add('phase-round');
-        phaseEl.textContent = '🥊 РАУНД';
+        phaseEl.textContent = 'РАУНД';
         
         // Предупреждение за 3 секунды
         if (boxingState.timeLeft <= 3 && boxingState.timeLeft > 0) {
@@ -191,10 +191,10 @@ function updateUI() {
         }
     } else if (boxingState.currentPhase === 'rest') {
         statusBlock.classList.add('phase-rest');
-        phaseEl.textContent = '😮‍💨 Отдых';
+        phaseEl.textContent = 'Отдых';
     } else if (boxingState.currentPhase === 'done') {
         statusBlock.classList.add('phase-done');
-        phaseEl.textContent = '🎉 Тренировка завершена!';
+        phaseEl.textContent = 'Тренировка завершена!';
         displayEl.textContent = 'ГОТОВО';
     } else {
         phaseEl.textContent = 'Готов к старту';
@@ -331,7 +331,7 @@ function applyPreset(btn) {
 
 // ===== ИНИЦИАЛИЗАЦИЯ =====
 function initBoxingTimer() {
-    if (!startBtn) return;   // если секции нет — выходим
+    if (!startBtn) return; 
     
     // Начальное состояние дисплея
     displayEl.textContent = formatTime(Math.min(parseInt(roundTimeInput.value) || 120, 300));

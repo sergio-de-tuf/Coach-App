@@ -93,7 +93,7 @@
             </li>
             <li>
               <a href="#tools" class="nav-link" data-section="toolsSection"
-                >Инструменты</a
+                >Таймеры</a
               >
             </li>
           </ul>
@@ -151,7 +151,7 @@
                 href="#tools"
                 class="mobile-nav-link"
                 data-section="toolsSection"
-                >Инструменты</a
+                >Таймеры</a
               >
             </li>
           </ul>
@@ -164,22 +164,22 @@
       <!-- Секция "Главная" -->
       <section id="dashboardSection" class="section section-hero active">
     <div class="section-header">
-        <h2 class="section-title">🏠 Главная</h2>
+        <h2 class="section-title"><img src="/src/assets/icons/Bank.svg" class="section-title-logo">  Главная</h2>
     </div>
     
     <div class="dashboard-grid">
         <div class="dashboard-card">
-            <span class="dashboard-icon">👥</span>
+            <span class="dashboard-icon"><img src="/src/assets/icons/People-3.svg" alt="" class="dashboard-icon-img"></span>
             <span class="dashboard-value" id="dashboardStudentsCount">0</span>
             <span class="dashboard-label">Учеников</span>
         </div>
         <div class="dashboard-card">
-            <span class="dashboard-icon">📅</span>
+            <span class="dashboard-icon"><img src="/src/assets/icons/CALENDAR.svg" alt="" class="dashboard-icon-img"></span>
             <span class="dashboard-value" id="dashboardTrainingsCount">0</span>
             <span class="dashboard-label">Тренировок</span>
         </div>
         <div class="dashboard-card">
-            <span class="dashboard-icon">🕐</span>
+            <span class="dashboard-icon"><img src="/src/assets/icons/clock.svg" alt="" class="dashboard-icon-img"></span>
             <span class="dashboard-value" id="dashboardUpcomingCount">0</span>
             <span class="dashboard-label">Предстоящих</span>
         </div>
@@ -214,7 +214,7 @@
       <!-- Секция "Ученики" -->
       <section id="studentsSection" class="section active">
         <div class="section-header">
-          <h2 class="section-title">👥 Ученики</h2>
+          <h2 class="section-title"><img src="/src/assets/icons/People-3.svg" class="section-title-logo"> Ученики</h2>
           <button id="addStudentBtn" class="btn btn-primary">
             <span class="btn-icon">➕</span>
             Добавить ученика
@@ -245,7 +245,7 @@
       <!-- Секция "Расписание" -->
       <section id="scheduleSection" class="section">
         <div class="section-header">
-          <h2 class="section-title">📅 Расписание тренировок</h2>
+          <h2 class="section-title"><img src="/src/assets/icons/EDIT.svg" class="section-title-logo">  Расписание тренировок</h2>
           <button id="addTrainingBtn" class="btn btn-primary">
             <span class="btn-icon">➕</span>
             Добавить тренировку
@@ -283,7 +283,7 @@
       <!-- Секция "Инструменты" -->
       <section id="toolsSection" class="section">
         <div class="section-header">
-          <h2 class="section-title">Инструменты</h2>
+          <h2 class="section-title"><img src="/src/assets/icons/Stopwatch.svg" class="section-title-logo">  Таймеры</h2>
         </div>
 
         <!-- Секундомер -->
@@ -372,25 +372,33 @@
               class="preset-btn"
               data-round="180"
               data-rest="60"
-              data-rounds="5"
+              data-rounds="12"
             >
-              3×1×5
+              3×1×12
             </button>
             <button
               class="preset-btn"
-              data-round="180"
-              data-rest="30"
-              data-rounds="12"
+              data-round="120"
+              data-rest="60"
+              data-rounds="20"
             >
-              3×30с×12
+              2×1×20
+            </button>
+            <button
+              class="preset-btn"
+              data-round="90"
+              data-rest="45"
+              data-rounds="30"
+            >
+              1.5×45с×30
             </button>
             <button
               class="preset-btn"
               data-round="60"
               data-rest="30"
-              data-rounds="10"
+              data-rounds="30"
             >
-              1×30с×10
+              1×30с×30
             </button>
           </div>
 

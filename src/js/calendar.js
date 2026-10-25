@@ -159,7 +159,7 @@ function selectDate(dateKey) {
     return `
         <div class="calendar-day-training">
             <span class="training-time">${t.time}</span>
-            <span class="training-student">${isGroup ? '👥' : '👤'} ${displayName}</span>
+            <span class="training-student">${displayName}</span>
             <span class="training-place">${t.place}</span>
         </div>
     `;
